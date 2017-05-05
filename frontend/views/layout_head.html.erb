@@ -1,0 +1,54 @@
+<meta name="controller" content="<%= controller.controller_name %>" />
+<script type="text/javascript">
+    var controller = $('html head meta[name="controller"]' ).attr('content');
+    console.log( controller + " Controller");
+</script>
+<% if controller.controller_name == 'resources' %>
+<script type="text/javascript" >
+    $( function() {
+      if (typeof(ResourceRenderer) != 'undefined') {
+        var _build_container_summary = ResourceRenderer.prototype.build_container_summary; // stash old method
+
+        ResourceRenderer.prototype.build_container_summary = function (node) {
+          var self = this;
+          var container_summary = '';
+
+          container_summary += node.component_id;
+
+          if (node['containers']) {
+            var container_summaries = [];
+
+            $.each(node['containers'], function(_, container) {
+              var summary_items = [];
+              if (container.top_container_indicator) {
+                var top_container_summary = '';
+                top_container_summary += ' (' + self.i18n('container_type', container.top_container_type);
+
+                if (container.top_container_barcode) {
+                  top_container_summary += ': ' + container.top_container_barcode;
+                }
+
+                top_container_summary += ')';
+
+                summary_items.push(top_container_summary);
+              }
+              if (container.type_2) {
+                summary_items.push(self.i18n('container_type', container.type_2) + ': ' + container.indicator_2);
+              }
+              if (container.type_3) {
+                summary_items.push(self.i18n('container_type', container.type_3) + ': ' + container.indicator_3);
+              }
+              container_summaries.push(summary_items.join(', '));
+            });
+
+            container_summary += container_summaries.join('; ');
+          }
+
+          /*var summary = _build_container_summary.apply(this, [node]);  // call old method*/
+          console.log(node.component_id);
+          return container_summary;
+        };
+      }
+    });
+</script>
+<% end %>
