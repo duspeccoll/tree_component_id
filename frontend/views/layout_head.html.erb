@@ -4,11 +4,9 @@
     console.log( controller + " Controller");
 </script>
 <% if controller.controller_name == 'resources' %>
-<script type="text/javascript" >
-    $( function() {
+<script type="text/javascript">
+    $(function() {
       if (typeof(ResourceRenderer) != 'undefined') {
-        var _build_container_summary = ResourceRenderer.prototype.build_container_summary; // stash old method
-
         ResourceRenderer.prototype.build_container_summary = function (node) {
           var self = this;
           var container_summary = '';
